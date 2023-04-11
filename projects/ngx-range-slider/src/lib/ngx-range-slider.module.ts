@@ -21,7 +21,9 @@ import {SliderLabelDirective} from './directives/slider-label.directive';
     NgForOf,
     NgClass
   ],
-  exports: []
+  exports: [
+    NgxSliderComponent
+  ]
 })
 export class NgxRangeSliderModule {
 }

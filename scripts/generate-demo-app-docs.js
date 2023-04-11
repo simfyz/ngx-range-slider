@@ -21,7 +21,7 @@ const utils = require('./utils.js');
  * The resulting files are not really useful on their own; they will be used later to generate demo app code
  */
 function generateTypedocDocs(typedocDocsDir) {
-  const publicApiConfigFile = path.resolve(__dirname, '../src/ngx-slider/lib/public_api.json');
+  const publicApiConfigFile = path.resolve(__dirname, '../projects/ngx-range-slider/src/lib/public_api.json');
   const publicApiConfig = JSON.parse(fs.readFileSync(publicApiConfigFile, { encoding: 'utf8' }));
 
   const files = publicApiConfig.exports
@@ -160,7 +160,7 @@ const typedocDocsDir = path.resolve(__dirname, '../docs');
 rimraf.sync(typedocDocsDir);
 generateTypedocDocs(typedocDocsDir);
 
-const demoAppDocsModuleDir = path.resolve(__dirname, '../src/demo-app/app/docs');
+const demoAppDocsModuleDir = path.resolve(__dirname, '../projects/demo-app/src/app/docs');
 rimraf.sync(demoAppDocsModuleDir);
 
 const typedocHtmlFiles = utils.readdirRecursivelySync(typedocDocsDir)

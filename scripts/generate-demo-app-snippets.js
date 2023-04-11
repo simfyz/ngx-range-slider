@@ -82,7 +82,7 @@ function tabHtml(tabTitle, codeContent, codeLang) {
 }
 
 
-const snippetsDir = path.resolve(__dirname, '../src/demo-app/app/snippets');
+const snippetsDir = path.resolve(__dirname, '../projects/demo-app/src/app/snippets');
 
 const templateFiles = utils.readdirRecursivelySync(snippetsDir)
   .filter((file) => file.endsWith('component.template.html'));

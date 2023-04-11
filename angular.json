@@ -68,8 +68,7 @@
               "projects/demo-app/src/assets"
             ],
             "styles": [
-              "projects/demo-app/src/styles.scss",
-              "projects/demo-app/src/docs-styles.scss"
+              "projects/demo-app/src/styles.scss"
             ],
             "scripts": []
           },

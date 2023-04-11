@@ -12,9 +12,6 @@
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "paths": {
-      "ngx-range-slider": [
-        "dist/ngx-range-slider"
-      ],
       "@local/ngx-slider": [
         "dist/ngx-range-slider"
       ]

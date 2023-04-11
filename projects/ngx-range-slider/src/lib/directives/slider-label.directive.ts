@@ -1,5 +1,6 @@
 import {ChangeDetectorRef, Directive, ElementRef, Renderer2} from '@angular/core';
 import {SliderElementDirective} from './slider-element.directive';
+import {ValueHelper} from '../utils/value-helper';
 
 @Directive({
   selector: '[ngxSliderLabel]'
@@ -17,10 +18,10 @@ export class SliderLabelDirective extends SliderElementDirective {
   setValue(value: string): void {
     let recalculateDimension: boolean = false;
 
-    if (!this.alwaysHide && !this.value ||
-      this.value?.length !== value.length ||
-      (this.value.length > 0 && this.dimension === 0))
-    {
+    if (!this.alwaysHide &&
+      (ValueHelper.isNullOrUndefined(this.value) ||
+        this.value?.length !== value.length ||
+        (this.value.length > 0 && this.dimension === 0))) {
       recalculateDimension = true;
     }
 
