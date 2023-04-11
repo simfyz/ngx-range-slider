@@ -4,7 +4,6 @@ import {tap, throttleTime} from 'rxjs/operators';
 import {supportsPassiveEvents} from 'detect-passive-events';
 
 import {EventListener} from './event-listener';
-import {ValueHelper} from '../utils/value-helper';
 
 /**
  * Helper class to attach event listeners to DOM elements with debounce support using rxjs
@@ -35,7 +34,7 @@ export class EventListenerHelper {
     };
 
     listener.eventsSubscription = listener.events
-      .pipe((!ValueHelper.isNullOrUndefined(throttleInterval))
+      .pipe(!!throttleInterval
         ? throttleTime(throttleInterval, undefined, {leading: true, trailing: true})
         : tap(() => {
         }) // no-op
@@ -48,17 +47,17 @@ export class EventListenerHelper {
   }
 
   public detachEventListener(eventListener: EventListener): void {
-    if (!ValueHelper.isNullOrUndefined(eventListener.eventsSubscription)) {
+    if (eventListener.eventsSubscription) {
       eventListener.eventsSubscription.unsubscribe();
       eventListener.eventsSubscription = null;
     }
 
-    if (!ValueHelper.isNullOrUndefined(eventListener.events)) {
+    if (eventListener.events) {
       eventListener.events.complete();
       eventListener.events = null;
     }
 
-    if (!ValueHelper.isNullOrUndefined(eventListener.teardownCallback)) {
+    if (eventListener.teardownCallback) {
       eventListener.teardownCallback();
       eventListener.teardownCallback = null;
     }
@@ -77,7 +76,7 @@ export class EventListenerHelper {
     listener.teardownCallback = this.renderer.listen(nativeElement, eventName, observerCallback);
 
     listener.eventsSubscription = listener.events
-      .pipe((!ValueHelper.isNullOrUndefined(throttleInterval))
+      .pipe(!!throttleInterval
         ? throttleTime(throttleInterval, undefined, {leading: true, trailing: true})
         : tap(() => {
         }) // no-op

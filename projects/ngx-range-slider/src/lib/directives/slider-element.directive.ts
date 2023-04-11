@@ -1,6 +1,5 @@
 import {ChangeDetectorRef, Directive, ElementRef, HostBinding, Renderer2} from '@angular/core';
 import {EventListenerHelper} from '../configs/event-listener-helper';
-import {ValueHelper} from '../utils/value-helper';
 import {EventListener} from '../configs/event-listener';
 
 @Directive({
@@ -174,7 +173,7 @@ export class SliderElementDirective {
   off(eventName?: string): void {
     let listenersToKeep: EventListener[];
     let listenersToRemove: EventListener[];
-    if (!ValueHelper.isNullOrUndefined(eventName)) {
+    if (eventName) {
       listenersToKeep = this.eventListeners.filter((event: EventListener) => event.eventName !== eventName);
       listenersToRemove = this.eventListeners.filter((event: EventListener) => event.eventName === eventName);
     } else {
@@ -190,6 +189,6 @@ export class SliderElementDirective {
   }
 
   private isRefDestroyed(): boolean {
-    return ValueHelper.isNullOrUndefined(this.changeDetectionRef) || this.changeDetectionRef['destroyed'];
+    return !this.changeDetectionRef || this.changeDetectionRef['destroyed'];
   }
 }

@@ -65,10 +65,10 @@ class ModelValues {
   highValue: number;
 
   public static compare(x?: ModelValues, y?: ModelValues): boolean {
-    if (ValueHelper.isNullOrUndefined(x) && ValueHelper.isNullOrUndefined(y)) {
+    if (!x && !y) {
       return false;
     }
-    if (ValueHelper.isNullOrUndefined(x) !== ValueHelper.isNullOrUndefined(y)) {
+    if (!x !== !y) {
       return false;
     }
     return x.value === y.value && x.highValue === y.highValue;
@@ -81,10 +81,10 @@ class ModelChange extends ModelValues {
   forceChange: boolean;
 
   public static override compare(x?: ModelChange, y?: ModelChange): boolean {
-    if (ValueHelper.isNullOrUndefined(x) && ValueHelper.isNullOrUndefined(y)) {
+    if (!x && !y) {
       return false;
     }
-    if (ValueHelper.isNullOrUndefined(x) !== ValueHelper.isNullOrUndefined(y)) {
+    if (!x !== !y) {
       return false;
     }
     return x.value === y.value &&
@@ -171,7 +171,7 @@ export class NgxSliderComponent {
 
   // Slider type, true means range slider
   public get range(): boolean {
-    return !ValueHelper.isNullOrUndefined(this.value) && !ValueHelper.isNullOrUndefined(this.highValue);
+    return !!this.value && !!this.highValue;
   }
 
   // Set to true if init method already executed
@@ -372,14 +372,13 @@ export class NgxSliderComponent {
   // OnChanges interface
   public ngOnChanges(changes: SimpleChanges): void {
     // Always apply options first
-    if (!ValueHelper.isNullOrUndefined(changes['options']) &&
+    if (changes['options'] &&
       JSON.stringify(changes['options'].previousValue) !== JSON.stringify(changes['options'].currentValue)) {
       this.onChangeOptions();
     }
 
     // Then value changes
-    if (!ValueHelper.isNullOrUndefined(changes['value']) ||
-      !ValueHelper.isNullOrUndefined(changes['highValue'])) {
+    if (changes['value'] || changes['highValue']) {
       this.inputModelChangeSubject.next({
         value: this.value,
         highValue: this.highValue,
@@ -479,42 +478,42 @@ export class NgxSliderComponent {
   }
 
   private unsubscribeOnMove(): void {
-    if (!ValueHelper.isNullOrUndefined(this.onMoveEventListener)) {
+    if (this.onMoveEventListener) {
       this.eventListenerHelper.detachEventListener(this.onMoveEventListener);
       this.onMoveEventListener = null;
     }
   }
 
   private unsubscribeOnEnd(): void {
-    if (!ValueHelper.isNullOrUndefined(this.onEndEventListener)) {
+    if (this.onEndEventListener) {
       this.eventListenerHelper.detachEventListener(this.onEndEventListener);
       this.onEndEventListener = null;
     }
   }
 
   private unsubscribeInputModelChangeSubject(): void {
-    if (!ValueHelper.isNullOrUndefined(this.inputModelChangeSubscription)) {
+    if (this.inputModelChangeSubscription) {
       this.inputModelChangeSubscription.unsubscribe();
       this.inputModelChangeSubscription = null;
     }
   }
 
   private unsubscribeOutputModelChangeSubject(): void {
-    if (!ValueHelper.isNullOrUndefined(this.outputModelChangeSubscription)) {
+    if (this.outputModelChangeSubscription) {
       this.outputModelChangeSubscription.unsubscribe();
       this.outputModelChangeSubscription = null;
     }
   }
 
   private unsubscribeManualRefresh(): void {
-    if (!ValueHelper.isNullOrUndefined(this.manualRefreshSubscription)) {
+    if (this.manualRefreshSubscription) {
       this.manualRefreshSubscription.unsubscribe();
       this.manualRefreshSubscription = null;
     }
   }
 
   private unsubscribeTriggerFocus(): void {
-    if (!ValueHelper.isNullOrUndefined(this.triggerFocusSubscription)) {
+    if (this.triggerFocusSubscription) {
       this.triggerFocusSubscription.unsubscribe();
       this.triggerFocusSubscription = null;
     }
@@ -539,18 +538,18 @@ export class NgxSliderComponent {
   }
 
   private modelValueToViewValue(modelValue: number): number {
-    if (ValueHelper.isNullOrUndefined(modelValue)) {
+    if (!modelValue) {
       return NaN;
     }
 
-    if (!ValueHelper.isNullOrUndefined(this.viewOptions.stepsArray) && !this.viewOptions.bindIndexForStepsArray) {
+    if (this.viewOptions.stepsArray && !this.viewOptions.bindIndexForStepsArray) {
       return ValueHelper.findStepIndex(+modelValue, this.viewOptions.stepsArray);
     }
     return +modelValue;
   }
 
   private viewValueToModelValue(viewValue: number): number {
-    if (!ValueHelper.isNullOrUndefined(this.viewOptions.stepsArray) && !this.viewOptions.bindIndexForStepsArray) {
+    if (!!this.viewOptions.stepsArray && !this.viewOptions.bindIndexForStepsArray) {
       return this.getStepValue(viewValue);
     }
     return viewValue;
@@ -558,7 +557,7 @@ export class NgxSliderComponent {
 
   private getStepValue(sliderValue: number): number {
     const step: CustomStepDefinition = this.viewOptions.stepsArray[sliderValue];
-    return (!ValueHelper.isNullOrUndefined(step)) ? step.value : NaN;
+    return !!step ? step.value : NaN;
   }
 
   private applyViewChange(): void {
@@ -633,14 +632,14 @@ export class NgxSliderComponent {
         this.highValueChange.emit(modelChange.highValue);
       }
 
-      if (!ValueHelper.isNullOrUndefined(this.onChangeCallback)) {
+      if (this.onChangeCallback) {
         if (this.range) {
           this.onChangeCallback([modelChange.value, modelChange.highValue]);
         } else {
           this.onChangeCallback(modelChange.value);
         }
       }
-      if (!ValueHelper.isNullOrUndefined(this.onTouchedCallback)) {
+      if (this.onTouchedCallback) {
         if (this.range) {
           this.onTouchedCallback([modelChange.value, modelChange.highValue]);
         } else {
@@ -667,7 +666,7 @@ export class NgxSliderComponent {
     normalisedInput.value = input.value;
     normalisedInput.highValue = input.highValue;
 
-    if (!ValueHelper.isNullOrUndefined(this.viewOptions.stepsArray)) {
+    if (this.viewOptions.stepsArray) {
       // When using steps array, only round to nearest step in the array
       // No other enforcement can be done, as the step array may be out of order, and that is perfectly fine
       if (this.viewOptions.enforceStepsArray) {
@@ -772,24 +771,23 @@ export class NgxSliderComponent {
     }
 
     this.viewOptions.showTicks = this.viewOptions.showTicks ||
-      this.viewOptions.showTicksValues ||
-      !ValueHelper.isNullOrUndefined(this.viewOptions.ticksArray);
+      this.viewOptions.showTicksValues || !!this.viewOptions.ticksArray;
     if (this.viewOptions.showTicks &&
-      (!ValueHelper.isNullOrUndefined(this.viewOptions.tickStep) || !ValueHelper.isNullOrUndefined(this.viewOptions.ticksArray))) {
+      (this.viewOptions.tickStep || !!this.viewOptions.ticksArray)) {
       this.intermediateTicks = true;
     }
 
     this.viewOptions.showSelectionBar = this.viewOptions.showSelectionBar ||
       this.viewOptions.showSelectionBarEnd ||
-      !ValueHelper.isNullOrUndefined(this.viewOptions.showSelectionBarFromValue);
+      !!this.viewOptions.showSelectionBarFromValue;
 
-    if (!ValueHelper.isNullOrUndefined(this.viewOptions.stepsArray)) {
+    if (this.viewOptions.stepsArray) {
       this.applyStepsArrayOptions();
     } else {
       this.applyFloorCeilOptions();
     }
 
-    if (ValueHelper.isNullOrUndefined(this.viewOptions.combineLabels)) {
+    if (!this.viewOptions.combineLabels) {
       this.viewOptions.combineLabels = (minValue: string, maxValue: string): string => {
         return minValue + ' - ' + maxValue;
       };
@@ -805,7 +803,7 @@ export class NgxSliderComponent {
     this.viewOptions.ceil = this.viewOptions.stepsArray.length - 1;
     this.viewOptions.step = 1;
 
-    if (ValueHelper.isNullOrUndefined(this.viewOptions.translate)) {
+    if (!this.viewOptions.translate) {
       this.viewOptions.translate = (modelValue: number): string => {
         if (this.viewOptions.bindIndexForStepsArray) {
           return String(this.getStepValue(modelValue));
@@ -816,7 +814,7 @@ export class NgxSliderComponent {
   }
 
   private applyFloorCeilOptions(): void {
-    if (ValueHelper.isNullOrUndefined(this.viewOptions.step)) {
+    if (!this.viewOptions.step) {
       this.viewOptions.step = 1;
     } else {
       this.viewOptions.step = +this.viewOptions.step;
@@ -825,14 +823,13 @@ export class NgxSliderComponent {
       }
     }
 
-    if (ValueHelper.isNullOrUndefined(this.viewOptions.ceil) ||
-      ValueHelper.isNullOrUndefined(this.viewOptions.floor)) {
+    if (!this.viewOptions.ceil || !this.viewOptions.floor) {
       throw Error('floor and ceil options must be supplied');
     }
     this.viewOptions.ceil = +this.viewOptions.ceil;
     this.viewOptions.floor = +this.viewOptions.floor;
 
-    if (ValueHelper.isNullOrUndefined(this.viewOptions.translate)) {
+    if (!this.viewOptions.translate) {
       this.viewOptions.translate = (value: number): string => String(value);
     }
   }
@@ -868,7 +865,7 @@ export class NgxSliderComponent {
   }
 
   private refocusPointerIfNeeded(): void {
-    if (!ValueHelper.isNullOrUndefined(this.currentFocusPointer)) {
+    if (this.currentFocusPointer) {
       this.onPointerFocus(this.currentFocusPointer);
       const element: SliderHandleDirective = this.getPointerElement(this.currentFocusPointer);
       element.focus();
@@ -937,7 +934,7 @@ export class NgxSliderComponent {
     this.sliderElementVerticalClass = this.viewOptions.vertical;
     for (const element of this.getAllSliderElements()) {
       // This is also called before ngAfterInit, so need to check that view child bindings work
-      if (!ValueHelper.isNullOrUndefined(element)) {
+      if (element) {
         element.setVertical(this.viewOptions.vertical);
       }
     }
@@ -1008,9 +1005,9 @@ export class NgxSliderComponent {
 
     this.minHandleElement.ariaOrientation = (this.viewOptions.vertical || this.viewOptions.rotate !== 0) ? 'vertical' : 'horizontal';
 
-    if (!ValueHelper.isNullOrUndefined(this.viewOptions.ariaLabel)) {
+    if (this.viewOptions.ariaLabel) {
       this.minHandleElement.ariaLabel = this.viewOptions.ariaLabel;
-    } else if (!ValueHelper.isNullOrUndefined(this.viewOptions.ariaLabelledBy)) {
+    } else if (this.viewOptions.ariaLabelledBy) {
       this.minHandleElement.ariaLabelledBy = this.viewOptions.ariaLabelledBy;
     }
 
@@ -1026,9 +1023,9 @@ export class NgxSliderComponent {
 
       this.maxHandleElement.ariaOrientation = (this.viewOptions.vertical || this.viewOptions.rotate !== 0) ? 'vertical' : 'horizontal';
 
-      if (!ValueHelper.isNullOrUndefined(this.viewOptions.ariaLabelHigh)) {
+      if (this.viewOptions.ariaLabelHigh) {
         this.maxHandleElement.ariaLabel = this.viewOptions.ariaLabelHigh;
-      } else if (!ValueHelper.isNullOrUndefined(this.viewOptions.ariaLabelledByHigh)) {
+      } else if (this.viewOptions.ariaLabelledByHigh) {
         this.maxHandleElement.ariaLabelledBy = this.viewOptions.ariaLabelledByHigh;
       }
     }
@@ -1052,7 +1049,7 @@ export class NgxSliderComponent {
   // Calculate dimensions that are dependent on view port size
   // Run once during initialization and every time view port changes size.
   private calculateViewDimensions(): void {
-    if (!ValueHelper.isNullOrUndefined(this.viewOptions.handleDimension)) {
+    if (this.viewOptions.handleDimension) {
       this.minHandleElement.setDimension(this.viewOptions.handleDimension);
     } else {
       this.minHandleElement.calculateDimension();
@@ -1062,7 +1059,7 @@ export class NgxSliderComponent {
 
     this.handleHalfDimension = handleWidth / 2;
 
-    if (!ValueHelper.isNullOrUndefined(this.viewOptions.barDimension)) {
+    if (this.viewOptions.barDimension) {
       this.fullBarElement.setDimension(this.viewOptions.barDimension);
     } else {
       this.fullBarElement.calculateDimension();
@@ -1101,7 +1098,7 @@ export class NgxSliderComponent {
       return;
     }
 
-    const ticksArray: number[] = !ValueHelper.isNullOrUndefined(this.viewOptions.ticksArray)
+    const ticksArray: number[] = !!this.viewOptions.ticksArray
       ? this.viewOptions.ticksArray
       : this.getTicksArray();
     const translate: string = this.viewOptions.vertical ? 'translateY' : 'translateX';
@@ -1110,8 +1107,9 @@ export class NgxSliderComponent {
       ticksArray.reverse();
     }
 
-    const tickValueStep: number = !ValueHelper.isNullOrUndefined(this.viewOptions.tickValueStep) ? this.viewOptions.tickValueStep :
-      (!ValueHelper.isNullOrUndefined(this.viewOptions.tickStep) ? this.viewOptions.tickStep : this.viewOptions.step);
+    const tickValueStep: number = !!this.viewOptions.tickValueStep
+      ? this.viewOptions.tickValueStep : !!this.viewOptions.tickStep
+        ? this.viewOptions.tickStep : this.viewOptions.step;
 
     let hasAtLeastOneLegend: boolean = false;
 
@@ -1132,20 +1130,20 @@ export class NgxSliderComponent {
         '-ms-transform': translation,
         transform: translation
       };
-      if (tick.selected && !ValueHelper.isNullOrUndefined(this.viewOptions.getSelectionBarColor)) {
+      if (tick.selected && this.viewOptions.getSelectionBarColor) {
         tick.style['background-color'] = this.getSelectionBarColor();
       }
-      if (!tick.selected && !ValueHelper.isNullOrUndefined(this.viewOptions.getTickColor)) {
+      if (!tick.selected && this.viewOptions.getTickColor) {
         tick.style['background-color'] = this.getTickColor(value);
       }
-      if (!ValueHelper.isNullOrUndefined(this.viewOptions.ticksTooltip)) {
+      if (this.viewOptions.ticksTooltip) {
         tick.tooltip = this.viewOptions.ticksTooltip(value);
         tick.tooltipPlacement = this.viewOptions.vertical ? 'right' : 'top';
       }
-      if (this.viewOptions.showTicksValues && !ValueHelper.isNullOrUndefined(tickValueStep) &&
+      if (this.viewOptions.showTicksValues && tickValueStep &&
         MathHelper.isModuloWithinPrecisionLimit(value, tickValueStep, this.viewOptions.precisionLimit)) {
         tick.value = this.getDisplayValue(value, LabelType.TickValue);
-        if (!ValueHelper.isNullOrUndefined(this.viewOptions.ticksValuesTooltip)) {
+        if (this.viewOptions.ticksValuesTooltip) {
           tick.valueTooltip = this.viewOptions.ticksValuesTooltip(value);
           tick.valueTooltipPlacement = this.viewOptions.vertical
             ? 'right'
@@ -1154,17 +1152,17 @@ export class NgxSliderComponent {
       }
 
       let legend: string = null;
-      if (!ValueHelper.isNullOrUndefined(this.viewOptions.stepsArray)) {
+      if (this.viewOptions.stepsArray) {
         const step: CustomStepDefinition = this.viewOptions.stepsArray[value];
-        if (!ValueHelper.isNullOrUndefined(this.viewOptions.getStepLegend)) {
+        if (this.viewOptions.getStepLegend) {
           legend = this.viewOptions.getStepLegend(step);
-        } else if (!ValueHelper.isNullOrUndefined(step)) {
+        } else if (step) {
           legend = step.legend;
         }
-      } else if (!ValueHelper.isNullOrUndefined(this.viewOptions.getLegend)) {
+      } else if (this.viewOptions.getLegend) {
         legend = this.viewOptions.getLegend(value);
       }
-      if (!ValueHelper.isNullOrUndefined(legend)) {
+      if (legend) {
         tick.legend = legend;
         hasAtLeastOneLegend = true;
       }
@@ -1178,7 +1176,7 @@ export class NgxSliderComponent {
 
     // We should avoid re-creating the ticks array if possible
     // This both improves performance and makes CSS animations work correctly
-    if (!ValueHelper.isNullOrUndefined(this.ticks) && this.ticks.length === newTicks.length) {
+    if (this.ticks && this.ticks.length === newTicks.length) {
       for (let i: number = 0; i < newTicks.length; ++i) {
         Object.assign(this.ticks[i], newTicks[i]);
       }
@@ -1192,7 +1190,7 @@ export class NgxSliderComponent {
   }
 
   private getTicksArray(): number[] {
-    const step: number = (!ValueHelper.isNullOrUndefined(this.viewOptions.tickStep)) ? this.viewOptions.tickStep : this.viewOptions.step;
+    const step: number = !!this.viewOptions.tickStep ? this.viewOptions.tickStep : this.viewOptions.step;
     const ticksArray: number[] = [];
 
     const numberOfValues: number = 1 + Math.floor(MathHelper.roundToPrecisionLimit(
@@ -1208,7 +1206,7 @@ export class NgxSliderComponent {
 
   private isTickSelected(value: number): boolean {
     if (!this.range) {
-      if (!ValueHelper.isNullOrUndefined(this.viewOptions.showSelectionBarFromValue)) {
+      if (this.viewOptions.showSelectionBarFromValue) {
         const center: number = this.viewOptions.showSelectionBarFromValue;
         if (this.viewLowValue > center &&
           value >= center &&
@@ -1300,7 +1298,7 @@ export class NgxSliderComponent {
     this.minHandleLabelElement.setValue(this.getDisplayValue(this.viewLowValue, LabelType.Low));
     this.minHandleLabelElement.setPosition(this.getHandleLabelPos(PointerType.Min, newPos));
 
-    if (!ValueHelper.isNullOrUndefined(this.viewOptions.getPointerColor)) {
+    if (this.viewOptions.getPointerColor) {
       this.minPointerStyle = {
         backgroundColor: this.getPointerColor(PointerType.Min)
       };
@@ -1317,7 +1315,7 @@ export class NgxSliderComponent {
     this.maxHandleLabelElement.setValue(this.getDisplayValue(this.viewHighValue, LabelType.High));
     this.maxHandleLabelElement.setPosition(this.getHandleLabelPos(PointerType.Max, newPos));
 
-    if (!ValueHelper.isNullOrUndefined(this.viewOptions.getPointerColor)) {
+    if (this.viewOptions.getPointerColor) {
       this.maxPointerStyle = {
         backgroundColor: this.getPointerColor(PointerType.Max)
       };
@@ -1411,7 +1409,7 @@ export class NgxSliderComponent {
       dimension = Math.abs(this.maxHandleElement.position - this.minHandleElement.position);
       position = positionForRange;
     } else {
-      if (!ValueHelper.isNullOrUndefined(this.viewOptions.showSelectionBarFromValue)) {
+      if (this.viewOptions.showSelectionBarFromValue) {
         const center: number = this.viewOptions.showSelectionBarFromValue;
         const centerPosition: number = this.valueToPosition(center);
         const isModelGreaterThanCenter: boolean = this.viewOptions.rightToLeft
@@ -1449,13 +1447,13 @@ export class NgxSliderComponent {
         this.rightOuterSelectionBarElement.setPosition(position + dimension);
       }
     }
-    if (!ValueHelper.isNullOrUndefined(this.viewOptions.getSelectionBarColor)) {
+    if (this.viewOptions.getSelectionBarColor) {
       const color: string = this.getSelectionBarColor();
       this.barStyle = {
         backgroundColor: color
       };
-    } else if (!ValueHelper.isNullOrUndefined(this.viewOptions.selectionBarGradient)) {
-      const offset: number = (!ValueHelper.isNullOrUndefined(this.viewOptions.showSelectionBarFromValue))
+    } else if (this.viewOptions.selectionBarGradient) {
+      const offset: number = (this.viewOptions.showSelectionBarFromValue)
         ? this.valueToPosition(this.viewOptions.showSelectionBarFromValue)
         : 0;
       const reversed: boolean = (offset - position > 0 && !isSelectionBarFromRight) || (offset - position <= 0 && isSelectionBarFromRight);
@@ -1573,7 +1571,7 @@ export class NgxSliderComponent {
 
   // Return the translated value if a translate function is provided else the original value
   private getDisplayValue(value: number, which: LabelType): string {
-    if (!ValueHelper.isNullOrUndefined(this.viewOptions.stepsArray) && !this.viewOptions.bindIndexForStepsArray) {
+    if (this.viewOptions.stepsArray && !this.viewOptions.bindIndexForStepsArray) {
       value = this.getStepValue(value);
     }
     return this.viewOptions.translate(value, which);
@@ -1581,7 +1579,7 @@ export class NgxSliderComponent {
 
   // Round value to step and precision based on minValue
   private roundStep(value: number, customStep?: number): number {
-    const step: number = !ValueHelper.isNullOrUndefined(customStep) ? customStep : this.viewOptions.step;
+    const step: number = customStep ? customStep : this.viewOptions.step;
     let steppedDifference: number = MathHelper.roundToPrecisionLimit(
       (value - this.viewOptions.floor) / step, this.viewOptions.precisionLimit);
     steppedDifference = Math.round(steppedDifference) * step;
@@ -1591,7 +1589,7 @@ export class NgxSliderComponent {
   // Translate value to pixel position
   private valueToPosition(val: number): number {
     let fn: ValueToPositionFunction = ValueHelper.linearValueToPosition;
-    if (!ValueHelper.isNullOrUndefined(this.viewOptions.customValueToPosition)) {
+    if (this.viewOptions.customValueToPosition) {
       fn = this.viewOptions.customValueToPosition;
     } else if (this.viewOptions.logScale) {
       fn = ValueHelper.logValueToPosition;
@@ -1599,7 +1597,7 @@ export class NgxSliderComponent {
 
     val = MathHelper.clampToRange(val, this.viewOptions.floor, this.viewOptions.ceil);
     let percent: number = fn(val, this.viewOptions.floor, this.viewOptions.ceil);
-    if (ValueHelper.isNullOrUndefined(percent)) {
+    if (!percent) {
       percent = 0;
     }
     if (this.viewOptions.rightToLeft) {
@@ -1615,13 +1613,13 @@ export class NgxSliderComponent {
       percent = 1 - percent;
     }
     let fn: PositionToValueFunction = ValueHelper.linearPositionToValue;
-    if (!ValueHelper.isNullOrUndefined(this.viewOptions.customPositionToValue)) {
+    if (this.viewOptions.customPositionToValue) {
       fn = this.viewOptions.customPositionToValue;
     } else if (this.viewOptions.logScale) {
       fn = ValueHelper.logPositionToValue;
     }
     const value: number = fn(percent, this.viewOptions.floor, this.viewOptions.ceil);
-    return !ValueHelper.isNullOrUndefined(value) ? value : 0;
+    return value || 0;
   }
 
   // Get the X-coordinate or Y-coordinate of an event
@@ -1632,7 +1630,7 @@ export class NgxSliderComponent {
 
     let touchIndex: number = 0;
     const touches: TouchList = event.touches;
-    if (!ValueHelper.isNullOrUndefined(targetTouchId)) {
+    if (targetTouchId) {
       for (let i: number = 0; i < touches.length; i++) {
         if (touches[i].identifier === targetTouchId) {
           touchIndex = i;
@@ -1778,7 +1776,7 @@ export class NgxSliderComponent {
     this.unsubscribeOnEnd();
 
     for (const element of this.getAllSliderElements()) {
-      if (!ValueHelper.isNullOrUndefined(element)) {
+      if (element) {
         element.off();
       }
     }
@@ -1808,7 +1806,7 @@ export class NgxSliderComponent {
     // have been animated into view.
     this.calculateViewDimensions();
 
-    if (ValueHelper.isNullOrUndefined(pointerType)) {
+    if (!pointerType) {
       pointerType = this.getNearestHandle(event);
     }
 
@@ -1851,9 +1849,9 @@ export class NgxSliderComponent {
 
     this.userChangeStart.emit(this.getChangeContext());
 
-    if (CompatibilityHelper.isTouchEvent(event) && !ValueHelper.isNullOrUndefined((event as TouchEvent).changedTouches)) {
+    if (CompatibilityHelper.isTouchEvent(event) && (event as TouchEvent).changedTouches) {
       // Store the touch identifier
-      if (ValueHelper.isNullOrUndefined(this.touchId)) {
+      if (!this.touchId) {
         this.touchId = (event as TouchEvent).changedTouches[0].identifier;
       }
     }
@@ -1883,7 +1881,7 @@ export class NgxSliderComponent {
         }
       }
 
-      if (ValueHelper.isNullOrUndefined(touchForThisSlider)) {
+      if (!touchForThisSlider) {
         return;
       }
     }
@@ -1896,7 +1894,7 @@ export class NgxSliderComponent {
 
     this.moving = true;
 
-    const newPos: number = !ValueHelper.isNullOrUndefined(touchForThisSlider)
+    const newPos: number = touchForThisSlider
       ? this.getEventPosition(event, touchForThisSlider.identifier)
       : this.getEventPosition(event);
     let newValue: number;
@@ -1911,7 +1909,7 @@ export class NgxSliderComponent {
       newValue = ceilValue;
     } else {
       newValue = this.positionToValue(newPos);
-      if (fromTick && !ValueHelper.isNullOrUndefined(this.viewOptions.tickStep)) {
+      if (fromTick && this.viewOptions.tickStep) {
         newValue = this.roundStep(newValue, this.viewOptions.tickStep);
       } else {
         newValue = this.roundStep(newValue);
@@ -1970,7 +1968,7 @@ export class NgxSliderComponent {
     pointer.off('keydown');
     pointer.off('keyup');
     pointer.active = false;
-    if (ValueHelper.isNullOrUndefined(this.touchId)) {
+    if (!this.touchId) {
       this.currentTrackingPointer = null;
       this.currentFocusPointer = null;
     }
@@ -2017,7 +2015,7 @@ export class NgxSliderComponent {
 
   private onKeyboardEvent(event: KeyboardEvent): void {
     const currentValue: number = this.getCurrentTrackingValue();
-    const keyCode: number = !ValueHelper.isNullOrUndefined(event.keyCode)
+    const keyCode: number = !!event.keyCode
       ? event.keyCode
       : event.which;
     const keys: { [keyCode: number]: string } = {
@@ -2034,7 +2032,7 @@ export class NgxSliderComponent {
     const key: string = keys[keyCode];
     const action: number = actions[key];
 
-    if (ValueHelper.isNullOrUndefined(action) || ValueHelper.isNullOrUndefined(this.currentTrackingPointer)) {
+    if (!action || this.currentTrackingPointer == null) {
       return;
     }
     event.preventDefault();
@@ -2198,12 +2196,12 @@ export class NgxSliderComponent {
 
   // Set the new value and position for the entire bar
   private positionTrackingBar(newMinValue: number, newMaxValue: number): void {
-    if (!ValueHelper.isNullOrUndefined(this.viewOptions.minLimit) &&
+    if (this.viewOptions.minLimit &&
       newMinValue < this.viewOptions.minLimit) {
       newMinValue = this.viewOptions.minLimit;
       newMaxValue = MathHelper.roundToPrecisionLimit(newMinValue + this.dragging.difference, this.viewOptions.precisionLimit);
     }
-    if (!ValueHelper.isNullOrUndefined(this.viewOptions.maxLimit) &&
+    if (this.viewOptions.maxLimit &&
       newMaxValue > this.viewOptions.maxLimit) {
       newMaxValue = this.viewOptions.maxLimit;
       newMinValue = MathHelper.roundToPrecisionLimit(newMaxValue - this.dragging.difference, this.viewOptions.precisionLimit);
@@ -2275,10 +2273,10 @@ export class NgxSliderComponent {
   }
 
   private applyMinMaxLimit(newValue: number): number {
-    if (!ValueHelper.isNullOrUndefined(this.viewOptions.minLimit) && newValue < this.viewOptions.minLimit) {
+    if (this.viewOptions.minLimit && newValue < this.viewOptions.minLimit) {
       return this.viewOptions.minLimit;
     }
-    if (!ValueHelper.isNullOrUndefined(this.viewOptions.maxLimit) && newValue > this.viewOptions.maxLimit) {
+    if (this.viewOptions.maxLimit && newValue > this.viewOptions.maxLimit) {
       return this.viewOptions.maxLimit;
     }
     return newValue;
@@ -2289,7 +2287,7 @@ export class NgxSliderComponent {
       ? this.viewHighValue
       : this.viewLowValue;
     const difference: number = Math.abs(newValue - oppositeValue);
-    if (!ValueHelper.isNullOrUndefined(this.viewOptions.minRange)) {
+    if (this.viewOptions.minRange) {
       if (difference < this.viewOptions.minRange) {
         if (this.currentTrackingPointer === PointerType.Min) {
           return MathHelper.roundToPrecisionLimit(this.viewHighValue - this.viewOptions.minRange, this.viewOptions.precisionLimit);
@@ -2298,7 +2296,7 @@ export class NgxSliderComponent {
         }
       }
     }
-    if (!ValueHelper.isNullOrUndefined(this.viewOptions.maxRange)) {
+    if (this.viewOptions.maxRange) {
       if (difference > this.viewOptions.maxRange) {
         if (this.currentTrackingPointer === PointerType.Min) {
           return MathHelper.roundToPrecisionLimit(this.viewHighValue - this.viewOptions.maxRange, this.viewOptions.precisionLimit);
@@ -2314,7 +2312,7 @@ export class NgxSliderComponent {
     const difference: number = (this.currentTrackingPointer === PointerType.Min)
       ? this.viewHighValue - newValue
       : newValue - this.viewLowValue;
-    const minRange: number = (!ValueHelper.isNullOrUndefined(this.viewOptions.minRange))
+    const minRange: number = (this.viewOptions.minRange)
       ? this.viewOptions.minRange
       : this.viewOptions.step;
     const maxRange: number = this.viewOptions.maxRange;
@@ -2334,7 +2332,7 @@ export class NgxSliderComponent {
         this.updateHandles(PointerType.Min, this.valueToPosition(this.viewLowValue));
       }
       this.updateAriaAttributes();
-    } else if (!ValueHelper.isNullOrUndefined(maxRange) && difference > maxRange) {
+    } else if (maxRange && difference > maxRange) {
       // if greater than maxRange
       if (this.currentTrackingPointer === PointerType.Min) {
         this.viewHighValue = MathHelper.roundToPrecisionLimit(newValue + maxRange, this.viewOptions.precisionLimit);
