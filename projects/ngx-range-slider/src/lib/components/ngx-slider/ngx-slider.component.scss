@@ -1,4 +1,12 @@
+@use "sass:math";
 @import '../../variables';
+
+
+$handle-size: math.div($handleSize, 2);
+$ticksCalculated: math.div(-($ticksHeight - $barDimension), 2);
+$bar-dimension: math.div($barDimension, 2);
+$hand-pointer-size: math.div($handlePointerSize, 2);
+$tick-width: math.div($ticksWidth, 2);
 
 @include ng-deep($enableNgDeep) {
   .ngx-slider {
@@ -55,8 +63,8 @@
     .ngx-slider-bar-wrapper {
       left: 0;
       box-sizing: border-box;
-      margin-top: -$handleSize / 2;
-      padding-top: $handleSize / 2;
+      margin-top: -$handle-size;
+      padding-top: $handle-size;
       width: 100%;
       height: $handleSize;
       z-index: 1;
@@ -72,7 +80,7 @@
       height: $barDimension;
       z-index: 1;
       background: $barNormalColor;
-      @include rounded($barDimension / 2);
+      @include rounded($bar-dimension);
     }
 
     .ngx-slider-bar-wrapper.ngx-slider-transparent .ngx-slider-bar {
@@ -90,26 +98,26 @@
     .ngx-slider-selection {
       z-index: 2;
       background: $barFillColor;
-      @include rounded($barDimension / 2);
+      @include rounded($bar-dimension);
     }
 
     .ngx-slider-pointer {
       cursor: pointer;
       width: $handleSize;
       height: $handleSize;
-      top: -$handleSize / 2 + $barDimension / 2;
+      top: -$handle-size + $bar-dimension;
       background-color: $handleBgColor;
       z-index: 3;
-      @include rounded($handleSize / 2);
+      @include rounded($handle-size);
 
       &:after {
         content: '';
         width: $handlePointerSize;
         height: $handlePointerSize;
         position: absolute;
-        top: $handleSize / 2 - $handlePointerSize / 2;
-        left: $handleSize / 2 - $handlePointerSize / 2;
-        @include rounded($handlePointerSize / 2);
+        top: $handle-size - $hand-pointer-size;
+        left: $handle-size - $hand-pointer-size;
+        @include rounded(math.div($handlePointerSize, 2));
         background: $handleInnerColor;
       }
 
@@ -128,7 +136,7 @@
 
     .ngx-slider-bubble {
       cursor: default;
-      bottom: $handleSize / 2;
+      bottom: $handle-size;
       padding: $bubblePaddingVertical $bubblePaddingHorizontal;
       color: $labelTextColor;
       font-size: $labelFontSize;
@@ -144,7 +152,7 @@
       height: 0;
       position: absolute;
       left: 0;
-      top: -($ticksHeight - $barDimension) / 2;
+      top: $ticksCalculated;
       margin: 0;
       z-index: 1;
       list-style: none;
@@ -167,7 +175,7 @@
       position: absolute;
       top: 0;
       left: 0;
-      margin-left: $handleSize / 2 - $ticksWidth / 2; // for centering
+      margin-left: $handle-size - $tick-width; // for centering
 
       &.ngx-slider-selected {
         background: $selectedTicksColor;
@@ -206,8 +214,8 @@
       .ngx-slider-bar-wrapper {
         top: auto;
         left: 0;
-        margin: 0 0 0 (-$handleSize / 2);
-        padding: 0 0 0 $handleSize / 2;
+        margin: 0 0 0 (-$handle-size);
+        padding: 0 0 0 $handle-size;
         height: 100%;
         width: $handleSize;
       }
@@ -220,20 +228,20 @@
       }
 
       .ngx-slider-pointer {
-        left: -$handleSize / 2 + $barDimension / 2 !important;
+        left: -$handle-size + $bar-dimension !important;
         top: auto;
         bottom: 0;
       }
 
       .ngx-slider-bubble {
-        left: $handleSize / 2 !important;
+        left: $handle-size !important;
         bottom: 0;
       }
 
       .ngx-slider-ticks {
         height: 100%;
         width: 0;
-        left: -($ticksHeight - $barDimension) / 2;
+        left: $ticksCalculated;
         top: 0;
         z-index: 1;
       }
@@ -241,7 +249,7 @@
       .ngx-slider-tick {
         vertical-align: middle;
         margin-left: auto;
-        margin-top: $handleSize / 2 - $ticksWidth / 2; // for centering
+        margin-top: $handle-size - $tick-width; // for centering
       }
 
       .ngx-slider-tick-value {
