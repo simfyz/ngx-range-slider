@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "prepare:demo-app": "node scripts/generate-demo-app-snippets.js && node scripts/generate-demo-app-docs.js && node scripts/copy-bootstrap-icons.js",
     "build": "ng build",
     "build:lib": "cd ./projects/ngx-range-slider/ && ng build ngx-range-slider",
     "watch": "ng build --watch --configuration development",

@@ -14,6 +14,9 @@
     "paths": {
       "ngx-range-slider": [
         "dist/ngx-range-slider"
+      ],
+      "@local/ngx-slider": [
+        "dist/ngx-range-slider"
       ]
     },
     "declaration": false,
