@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { NgxSliderComponent } from './ngx-slider.component';
+import {NgxSliderComponent} from './ngx-slider.component';
 
 describe('NgxSliderComponent', () => {
   let component: NgxSliderComponent;
@@ -8,7 +8,7 @@ describe('NgxSliderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NgxSliderComponent ]
+      imports: [NgxSliderComponent]
     })
     .compileComponents();
 

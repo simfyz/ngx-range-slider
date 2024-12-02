@@ -2,9 +2,7 @@ import {ChangeDetectorRef, Directive, ElementRef, Renderer2} from '@angular/core
 import {SliderElementDirective} from './slider-element.directive';
 import {ValueHelper} from '../utils/value-helper';
 
-@Directive({
-  selector: '[ngxSliderLabel]'
-})
+@Directive({selector: '[ngxSliderLabel]'})
 export class SliderLabelDirective extends SliderElementDirective {
   private _value: string | null = null;
   get value(): string | null {

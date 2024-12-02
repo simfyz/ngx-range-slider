@@ -1,4 +1,4 @@
-import { PointerType } from './pointer-type';
+import {PointerType} from './pointer-type';
 
 /** Label type */
 export enum LabelType {

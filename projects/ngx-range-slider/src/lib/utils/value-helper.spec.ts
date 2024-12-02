@@ -1,5 +1,5 @@
-import { ValueHelper } from './value-helper';
-import { CustomStepDefinition } from './options';
+import {ValueHelper} from './value-helper';
+import {CustomStepDefinition} from './options';
 
 const precision: number = 0.0001;
 

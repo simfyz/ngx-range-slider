@@ -30,6 +30,8 @@ import {EventListenerHelper} from '../../configs/event-listener-helper';
 import {CompatibilityHelper} from '../../configs/compatibility-helper';
 import {supportsPassiveEvents} from 'detect-passive-events';
 import {EventListener} from '../../configs/event-listener';
+import {NgClass, NgStyle} from '@angular/common';
+import {TooltipWrapperComponent} from '../tooltip-wrapper/tooltip-wrapper.component';
 
 declare class ResizeObserver {
   constructor(callback: () => void);
@@ -115,7 +117,8 @@ const NGX_SLIDER_CONTROL_VALUE_ACCESSOR: any = {
   styleUrls: ['./ngx-slider.component.scss'],
   host: {class: 'ngx-slider'},
   encapsulation: ViewEncapsulation.None,
-  providers: [NGX_SLIDER_CONTROL_VALUE_ACCESSOR]
+  providers: [NGX_SLIDER_CONTROL_VALUE_ACCESSOR],
+  imports: [SliderElementDirective, NgStyle, SliderHandleDirective, SliderLabelDirective, NgClass, TooltipWrapperComponent]
 })
 export class NgxSliderComponent {
   // Model for low value of slider. For simple slider, this is the only input. For range slider, this is the low value.

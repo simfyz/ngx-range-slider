@@ -1,9 +1,11 @@
 import {Component, Input, TemplateRef} from '@angular/core';
 
+
 @Component({
   selector: 'ngx-slider-tooltip-wrapper',
   templateUrl: './tooltip-wrapper.component.html',
-  styleUrls: ['./tooltip-wrapper.component.scss']
+  styleUrls: ['./tooltip-wrapper.component.scss'],
+  imports: []
 })
 export class TooltipWrapperComponent {
   @Input() template: TemplateRef<any> | null = null;

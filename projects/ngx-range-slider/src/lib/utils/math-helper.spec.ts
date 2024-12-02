@@ -1,4 +1,4 @@
-import { MathHelper } from './math-helper';
+import {MathHelper} from './math-helper';
 
 describe('MathHelper', () => {
   describe('roundToPrecisionLimit', () => {

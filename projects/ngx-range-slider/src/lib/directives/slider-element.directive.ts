@@ -3,9 +3,7 @@ import {EventListenerHelper} from '../configs/event-listener-helper';
 import {ValueHelper} from '../utils/value-helper';
 import {EventListener} from '../configs/event-listener';
 
-@Directive({
-  selector: '[ngxSliderElement]'
-})
+@Directive({selector: '[ngxSliderElement]'})
 export class SliderElementDirective {
   private _position: number = 0;
   get position(): number {

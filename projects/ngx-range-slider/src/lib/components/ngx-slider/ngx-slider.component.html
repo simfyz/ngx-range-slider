@@ -7,7 +7,8 @@
   <span class="ngx-slider-span ngx-slider-bar"></span>
 </span>
 <!-- // 2 The whole slider bar -->
-<span ngxSliderElement #fullBar [class.ngx-slider-transparent]="fullBarTransparentClass" class="ngx-slider-span ngx-slider-bar-wrapper ngx-slider-full-bar">
+<span ngxSliderElement #fullBar [class.ngx-slider-transparent]="fullBarTransparentClass"
+      class="ngx-slider-span ngx-slider-bar-wrapper ngx-slider-full-bar">
   <span class="ngx-slider-span ngx-slider-bar"></span>
 </span>
 <!-- // 3 Selection bar between two handles -->
@@ -32,11 +33,16 @@
 <span ngxSliderLabel #combinedLabel class="ngx-slider-span ngx-slider-bubble ngx-slider-combined"></span>
 <!-- // 11 The ticks -->
 <span ngxSliderElement #ticksElement [hidden]="!showTicks" [class.ngx-slider-ticks-values-under]="ticksUnderValuesClass" class="ngx-slider-ticks">
-  <span *ngFor="let t of ticks" class="ngx-slider-tick" [ngClass]="{'ngx-slider-selected': t.selected}" [ngStyle]="t.style">
-    <ngx-slider-tooltip-wrapper [template]="tooltipTemplate" [tooltip]="t.tooltip" [placement]="t.tooltipPlacement"></ngx-slider-tooltip-wrapper>
-    <ngx-slider-tooltip-wrapper *ngIf="t.value != null" class="ngx-slider-span ngx-slider-tick-value"
-                                [template]="tooltipTemplate" [tooltip]="t.valueTooltip" [placement]="t.valueTooltipPlacement"
-                                [content]="t.value"></ngx-slider-tooltip-wrapper>
-    <span *ngIf="t.legend != null" class="ngx-slider-span ngx-slider-tick-legend" [innerHTML]="t.legend"></span>
-  </span>
+  @for (t of ticks; track t) {
+    <span class="ngx-slider-tick" [ngClass]="{'ngx-slider-selected': t.selected}" [ngStyle]="t.style">
+      <ngx-slider-tooltip-wrapper [template]="tooltipTemplate" [tooltip]="t.tooltip" [placement]="t.tooltipPlacement"></ngx-slider-tooltip-wrapper>
+      @if (t.value != null) {
+        <ngx-slider-tooltip-wrapper class="ngx-slider-span ngx-slider-tick-value"
+                                    [template]="tooltipTemplate" [tooltip]="t.valueTooltip" [placement]="t.valueTooltipPlacement"
+                                    [content]="t.value"></ngx-slider-tooltip-wrapper>
+      } @if (t.legend != null) {
+      <span class="ngx-slider-span ngx-slider-tick-legend" [innerHTML]="t.legend"></span>
+    }
+    </span>
+  }
 </span>

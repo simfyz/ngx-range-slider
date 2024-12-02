@@ -1,9 +1,7 @@
 import {ChangeDetectorRef, Directive, ElementRef, HostBinding, Renderer2} from '@angular/core';
 import {SliderElementDirective} from './slider-element.directive';
 
-@Directive({
-  selector: '[ngxSliderHandle]'
-})
+@Directive({selector: '[ngxSliderHandle]'})
 export class SliderHandleDirective extends SliderElementDirective {
   @HostBinding('class.ngx-slider-active')
   active: boolean = false;

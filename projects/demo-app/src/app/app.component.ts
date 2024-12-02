@@ -1,10 +1,11 @@
 import {Component} from '@angular/core';
-import {Options} from '@local/ngx-slider';
+import {NgxSliderComponent, Options} from '@local/ngx-slider';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  imports: [NgxSliderComponent]
 })
 export class AppComponent {
   title = 'demo-app';

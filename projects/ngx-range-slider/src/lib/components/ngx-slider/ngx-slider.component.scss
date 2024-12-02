@@ -1,26 +1,26 @@
 @use "sass:math";
-@import '../../variables';
+@use '../../variables' as vars;
 
 
-$handle-size: math.div($handleSize, 2);
-$ticksCalculated: math.div(-($ticksHeight - $barDimension), 2);
-$bar-dimension: math.div($barDimension, 2);
-$hand-pointer-size: math.div($handlePointerSize, 2);
-$tick-width: math.div($ticksWidth, 2);
+$handle-size: math.div(vars.$handleSize, 2);
+$ticksCalculated: math.div(-(vars.$ticksHeight - vars.$barDimension), 2);
+$bar-dimension: math.div(vars.$barDimension, 2);
+$hand-pointer-size: math.div(vars.$handlePointerSize, 2);
+$tick-width: math.div(vars.$ticksWidth, 2);
 
 
 .ngx-slider {
   display: inline-block;
   position: relative;
-  height: $barDimension;
+  height: vars.$barDimension;
   width: 100%;
-  margin: $sliderMarginWithLabel 0 $sliderMargin 0;
+  margin: vars.$sliderMarginWithLabel 0 vars.$sliderMargin 0;
   vertical-align: middle;
   user-select: none;
   touch-action: pan-y;
 
   &.with-legend {
-    margin-bottom: $withLegendMargin;
+    margin-bottom: vars.$withLegendMargin;
   }
 
   &[disabled] {
@@ -28,7 +28,7 @@ $tick-width: math.div($ticksWidth, 2);
 
     .ngx-slider-pointer {
       cursor: not-allowed;
-      background-color: $handleDisabledColor;
+      background-color: vars.$handleDisabledColor;
     }
 
     .ngx-slider-draggable {
@@ -36,14 +36,14 @@ $tick-width: math.div($ticksWidth, 2);
     }
 
     .ngx-slider-selection {
-      background: $barDisabledFillColor;
+      background: vars.$barDisabledFillColor;
     }
 
     .ngx-slider-tick {
       cursor: not-allowed;
 
       &.ngx-slider-selected {
-        background: $barDisabledFillColor;
+        background: vars.$barDisabledFillColor;
       }
     }
   }
@@ -66,7 +66,7 @@ $tick-width: math.div($ticksWidth, 2);
     margin-top: -$handle-size;
     padding-top: $handle-size;
     width: 100%;
-    height: $handleSize;
+    height: vars.$handleSize;
     z-index: 1;
   }
 
@@ -77,10 +77,10 @@ $tick-width: math.div($ticksWidth, 2);
   .ngx-slider-bar {
     left: 0;
     width: 100%;
-    height: $barDimension;
+    height: vars.$barDimension;
     z-index: 1;
-    background: $barNormalColor;
-    @include rounded($bar-dimension);
+    background: vars.$barNormalColor;
+    @include vars.rounded($bar-dimension);
   }
 
   .ngx-slider-bar-wrapper.ngx-slider-transparent .ngx-slider-bar {
@@ -88,48 +88,48 @@ $tick-width: math.div($ticksWidth, 2);
   }
 
   .ngx-slider-bar-wrapper.ngx-slider-left-out-selection .ngx-slider-bar {
-    background: $barLeftOutSelectionColor;
+    background: vars.$barLeftOutSelectionColor;
   }
 
   .ngx-slider-bar-wrapper.ngx-slider-right-out-selection .ngx-slider-bar {
-    background: $barRightOutSelectionColor;
+    background: vars.$barRightOutSelectionColor;
   }
 
   .ngx-slider-selection {
     z-index: 2;
-    background: $barFillColor;
-    @include rounded($bar-dimension);
+    background: vars.$barFillColor;
+    @include vars.rounded($bar-dimension);
   }
 
   .ngx-slider-pointer {
     cursor: pointer;
-    width: $handleSize;
-    height: $handleSize;
-    top: -$handle-size + $bar-dimension;
-    background-color: $handleBgColor;
+    width: vars.$handleSize;
+    height: vars.$handleSize;
+    top: -($handle-size) + $bar-dimension;
+    background-color: vars.$handleBgColor;
     z-index: 3;
-    @include rounded($handle-size);
+    @include vars.rounded($handle-size);
 
     &:after {
       content: '';
-      width: $handlePointerSize;
-      height: $handlePointerSize;
+      width: vars.$handlePointerSize;
+      height: vars.$handlePointerSize;
       position: absolute;
       top: $handle-size - $hand-pointer-size;
       left: $handle-size - $hand-pointer-size;
-      @include rounded(math.div($handlePointerSize, 2));
-      background: $handleInnerColor;
+      @include vars.rounded(math.div(vars.$handlePointerSize, 2));
+      background: vars.$handleInnerColor;
     }
 
     &:hover:after {
-      background-color: $handleHoverColor;
+      background-color: vars.$handleHoverColor;
     }
 
     &.ngx-slider-active {
       z-index: 4;
 
       &:after {
-        background-color: $handleActiveColor;
+        background-color: vars.$handleActiveColor;
       }
     }
   }
@@ -137,12 +137,12 @@ $tick-width: math.div($ticksWidth, 2);
   .ngx-slider-bubble {
     cursor: default;
     bottom: $handle-size;
-    padding: $bubblePaddingVertical $bubblePaddingHorizontal;
-    color: $labelTextColor;
-    font-size: $labelFontSize;
+    padding: vars.$bubblePaddingVertical vars.$bubblePaddingHorizontal;
+    color: vars.$labelTextColor;
+    font-size: vars.$labelFontSize;
 
     &.ngx-slider-limit {
-      color: $limitLabelTextColor;
+      color: vars.$limitLabelTextColor;
     }
   }
 
@@ -161,16 +161,16 @@ $tick-width: math.div($ticksWidth, 2);
   .ngx-slider-ticks-values-under {
     .ngx-slider-tick-value {
       top: auto;
-      bottom: $ticksValuePosition - 2;
+      bottom: vars.$ticksValuePosition - 2;
     }
   }
 
   .ngx-slider-tick {
     text-align: center;
     cursor: pointer;
-    width: $ticksWidth;
-    height: $ticksHeight;
-    background: $ticksColor;
+    width: vars.$ticksWidth;
+    height: vars.$ticksHeight;
+    background: vars.$ticksColor;
     border-radius: 50%;
     position: absolute;
     top: 0;
@@ -178,29 +178,29 @@ $tick-width: math.div($ticksWidth, 2);
     margin-left: $handle-size - $tick-width; // for centering
 
     &.ngx-slider-selected {
-      background: $selectedTicksColor;
+      background: vars.$selectedTicksColor;
     }
   }
 
   .ngx-slider-tick-value {
     position: absolute;
-    top: $ticksValuePosition;
+    top: vars.$ticksValuePosition;
     transform: translate(-50%, 0);
   }
 
   .ngx-slider-tick-legend {
     position: absolute;
-    top: $ticksLegendPosition;
+    top: vars.$ticksLegendPosition;
     transform: translate(-50%, 0);
-    max-width: $tickLegendMaxWidth;
+    max-width: vars.$tickLegendMaxWidth;
     white-space: normal;
   }
 
   &.vertical {
     position: relative;
-    width: $barDimension;
+    width: vars.$barDimension;
     height: 100%;
-    margin: 0 $sliderVerticalMargin;
+    margin: 0 vars.$sliderVerticalMargin;
     padding: 0;
     vertical-align: baseline;
     touch-action: pan-x;
@@ -214,21 +214,21 @@ $tick-width: math.div($ticksWidth, 2);
     .ngx-slider-bar-wrapper {
       top: auto;
       left: 0;
-      margin: 0 0 0 (-$handle-size);
+      margin: 0 0 0 (-($handle-size));
       padding: 0 0 0 $handle-size;
       height: 100%;
-      width: $handleSize;
+      width: vars.$handleSize;
     }
 
     .ngx-slider-bar {
       bottom: 0;
       left: auto;
-      width: $barDimension;
+      width: vars.$barDimension;
       height: 100%;
     }
 
     .ngx-slider-pointer {
-      left: -$handle-size + $bar-dimension !important;
+      left: -($handle-size) + $bar-dimension !important;
       top: auto;
       bottom: 0;
     }
@@ -253,14 +253,14 @@ $tick-width: math.div($ticksWidth, 2);
     }
 
     .ngx-slider-tick-value {
-      left: $ticksValuePositionOnVertical;
+      left: vars.$ticksValuePositionOnVertical;
       top: auto;
       transform: translate(0, -28%);
     }
 
     .ngx-slider-tick-legend {
       top: auto;
-      right: $ticksLegendPosition;
+      right: vars.$ticksLegendPosition;
       transform: translate(0, -28%);
       max-width: none;
       white-space: nowrap;
@@ -270,7 +270,7 @@ $tick-width: math.div($ticksWidth, 2);
       .ngx-slider-tick-value {
         bottom: auto;
         left: auto;
-        right: $ticksValuePositionOnVertical;
+        right: vars.$ticksValuePositionOnVertical;
       }
     }
   }
@@ -281,35 +281,35 @@ $tick-width: math.div($ticksWidth, 2);
 
   &.animate {
     .ngx-slider-bar-wrapper {
-      transition: all linear $animationDuration;
+      transition: all linear vars.$animationDuration;
     }
 
     .ngx-slider-selection {
-      transition: background-color linear $animationDuration;
+      transition: background-color linear vars.$animationDuration;
     }
 
     .ngx-slider-pointer {
-      transition: all linear $animationDuration;
+      transition: all linear vars.$animationDuration;
 
       &:after {
-        transition: all linear $animationDuration;
+        transition: all linear vars.$animationDuration;
       }
     }
 
     .ngx-slider-bubble {
-      transition: all linear $animationDuration;
+      transition: all linear vars.$animationDuration;
 
       &.ngx-slider-limit {
-        transition: opacity linear $animationDuration;
+        transition: opacity linear vars.$animationDuration;
       }
 
       &.ngx-slider-combined {
-        transition: opacity linear $animationDuration;
+        transition: opacity linear vars.$animationDuration;
       }
     }
 
     .ngx-slider-tick {
-      transition: background-color linear $animationDuration;
+      transition: background-color linear vars.$animationDuration;
     }
   }
 }
